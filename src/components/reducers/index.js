@@ -12,11 +12,15 @@ export const hotColdReducer = (state=initialState, action) => {
     let guess;
     guess = parseInt(action.guess, 10);
     if (isNaN(guess)) {
-      this.setState({ feedback: 'Please enter a valid number' });
-      return;
+      feedback = 'Please enter a valid number.';
+
+      return Object.assign({}, state, {
+        feedback,
+        guesses: [ ...state.guesses, guess ]
+      });
     }
 
-    const difference = Math.abs(guess - this.state.correctAnswer);
+    const difference = Math.abs(guess - state.correctAnswer);
 
     let feedback;
     if (difference >= 50) {
@@ -30,10 +34,9 @@ export const hotColdReducer = (state=initialState, action) => {
     } else {
       feedback = 'You got it!';
     }
-    return 
-    this.setState({
+    return Object.assign({}, state, {
       feedback,
-      guesses: [...this.state.guesses, guess]
+      guesses: [...state.guesses, guess]
     });
   }
   else if (action.type === RESTART_GAME) {
@@ -46,8 +49,6 @@ export const hotColdReducer = (state=initialState, action) => {
   } else if (action.type === AURAL_UPDATE) {
       const { guesses, feedback } = this.state;
   
-      // If there's not exactly 1 guess, we want to
-      // pluralize the nouns in this aural update.
       const pluralize = guesses.length !== 1;
   
       let  auralStatus = `Here's the status of the game right now: ${feedback} You've made ${guesses.length} ${pluralize ? 'guesses' : 'guess'}.`;
@@ -55,9 +56,10 @@ export const hotColdReducer = (state=initialState, action) => {
       if (guesses.length > 0) {
         auralStatus += ` ${pluralize ? 'In order of most- to least-recent, they are' : 'It was'}: ${guesses.reverse().join(', ')}`;
       }
-      return this.setState({ auralStatus });
+      return Object.assign({}, state, {auralStatus});
     }
     else {
+      
     return state;
   }
    

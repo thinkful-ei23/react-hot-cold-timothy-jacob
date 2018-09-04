@@ -6,12 +6,10 @@ import StatusSection from './status-section';
 import InfoSection from './info-section';
 import { connect } from 'react-redux';
 
-import { makeGuess, restartGame, auralUpdate } from './reducers/index'
+import { makeGuess, restartGame, auralUpdate } from './actions/index'
 
 export class Game extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+  
 
   restartGame() { 
     return this.props.dispatch(restartGame());
@@ -26,7 +24,8 @@ export class Game extends React.Component {
   }
 
   render() {
-    const { feedback, guesses, auralStatus } = this.state;
+    
+    const { feedback, guesses, auralStatus } = this.props;
     const guessCount = guesses.length;
     
     return (
